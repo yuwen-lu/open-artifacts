@@ -7,7 +7,13 @@ import { Models } from "@/app/types";
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  const { messages, apiKey, model } = await req.json();
+  const { messages, model } = await req.json();
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  
+  if (!apiKey) {
+    throw new Error("ANTHROPIC_API_KEY is not configured");
+  }
 
   let llm;
   let options: Record<string, any> = {};

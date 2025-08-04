@@ -4,9 +4,6 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "react-hot-toast";
 import ReactQueryProvider from "@/app/react-query-provider";
-import { cookies } from "next/headers";
-import { SupabaseProvider } from "@/lib/supabase";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -18,29 +15,20 @@ export const metadata: Metadata = {
   description: "Create and Share Artifacts with Claude and other models",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = createServerComponentClient({ cookies });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
   return (
     <html lang="en">
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
-        <SupabaseProvider session={session}>
-          <ReactQueryProvider>
-            {children}
-
-            <Toaster />
-          </ReactQueryProvider>
-        </SupabaseProvider>
+        <ReactQueryProvider>
+          {children}
+          <Toaster />
+        </ReactQueryProvider>
       </body>
     </html>
   );
