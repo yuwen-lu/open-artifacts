@@ -23,6 +23,7 @@ export const ChatPanel = ({ id }: Props) => {
     useState<ArtifactMessagePartData | null>(null);
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [selectedArtifacts, setSelectedArtifacts] = useState<string[]>([]);
+  const [currentSettings, setCurrentSettings] = useState(getSettings());
 
   // Chat hook setup
   const {
@@ -50,6 +51,19 @@ export const ChatPanel = ({ id }: Props) => {
       setInput((prev) => prev + ` ${transcript.text}`);
     }
   }, [recording, transcribing, transcript?.text, setInput]);
+
+  // Update settings when they change in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setCurrentSettings(getSettings());
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   // Warn user before leaving page if there are messages
   useEffect(() => {
@@ -107,8 +121,6 @@ export const ChatPanel = ({ id }: Props) => {
     const query = input.trim();
     if (!query) return;
 
-    const settings = getSettings();
-
     const messageAttachments = [
       ...attachments
         .filter((item) => item.contentType?.startsWith("image"))
@@ -124,7 +136,7 @@ export const ChatPanel = ({ id }: Props) => {
       },
       {
         body: {
-          model: settings.model,
+          model: currentSettings.model,
         },
       }
     );

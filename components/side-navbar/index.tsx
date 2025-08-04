@@ -5,9 +5,18 @@ import { SidebarIcon, SquarePenIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ModelSelector } from "@/components/model-selector";
+import { getSettings, updateSettings } from "@/lib/userSettings";
+import { Models } from "@/app/types";
 
 export const SideNavBar = () => {
   const [open, setOpen] = useState(false);
+  const [currentModel, setCurrentModel] = useState<Models>(getSettings().model);
+
+  const handleModelChange = (model: Models) => {
+    setCurrentModel(model);
+    updateSettings({ model });
+  };
 
   if (open) {
     return (
@@ -31,6 +40,7 @@ export const SideNavBar = () => {
         </div>
 
         <div className="flex flex-col gap-4 mt-2">
+          <ModelSelector value={currentModel} onChange={handleModelChange} />
           <a
             href="https://github.com/13point5/open-artifacts"
             target="_blank"

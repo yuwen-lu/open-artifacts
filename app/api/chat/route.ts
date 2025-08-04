@@ -1,7 +1,6 @@
 import { ArtifactoSystemPrompt } from "@/app/api/chat/systemPrompt";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { streamText, convertToCoreMessages, Message, ImagePart } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
 import { Models } from "@/app/types";
 
 export const maxDuration = 60;
@@ -18,28 +17,17 @@ export async function POST(req: Request) {
   let llm;
   let options: Record<string, any> = {};
 
-  if (model === Models.claude) {
+  if (model === Models.claudeOpus4 || model === Models.claudeSonnet4) {
     const anthropic = createAnthropic({
       apiKey,
     });
 
-    llm = anthropic("claude-3-5-sonnet-20240620");
+    llm = anthropic(model);
 
     options = {
       ...options,
       maxTokens: 8192,
-      headers: {
-        ...(options.headers || {}),
-        "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15",
-      },
     };
-  } else if (model.startsWith("gpt")) {
-    const openai = createOpenAI({
-      compatibility: "strict", // strict mode, enable when using the OpenAI API
-      apiKey,
-    });
-
-    llm = openai(model);
   }
 
   if (!llm) throw new Error(`Unsupported model: ${model}`);
