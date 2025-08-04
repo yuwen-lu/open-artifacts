@@ -4,18 +4,38 @@ import { Button } from "@/components/ui/button";
 import { SidebarIcon, SquarePenIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ModelSelector } from "@/components/model-selector";
 import { getSettings, updateSettings } from "@/lib/userSettings";
 import { Models } from "@/app/types";
 
 export const SideNavBar = () => {
   const [open, setOpen] = useState(false);
-  const [currentModel, setCurrentModel] = useState<Models>(getSettings().model);
+  const [currentModel, setCurrentModel] = useState<Models>(Models.claudeSonnet4);
+
+  // Initialize model from settings after component mounts
+  useEffect(() => {
+    setCurrentModel(getSettings().model);
+  }, []);
+
+  // Listen for localStorage changes to sync model selection
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setCurrentModel(getSettings().model);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const handleModelChange = (model: Models) => {
     setCurrentModel(model);
     updateSettings({ model });
+    
+    // Manually trigger storage event for same-window sync
+    window.dispatchEvent(new Event('storage'));
   };
 
   if (open) {

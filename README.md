@@ -5,21 +5,21 @@
 ![Open Artifacts Demo](public/demo.png)
 ![Open Artifacts Demo 2](public/crop-and-talk.png)
 
-Open Artifacts is a free, open-source project that clones the functionality of [Claude](https://claude.ai) while supporting the generation of Artifacts with [Anthropic](https://www.anthropic.com/) and [OpenAI](https://openai.com/) LLMs using the user's API keys.
+Open Artifacts is a free, open-source project that clones the functionality of [Claude](https://claude.ai) while supporting the generation of Artifacts with [Anthropic](https://www.anthropic.com/) Claude 4 models (Opus and Sonnet).
 
 The Artifact viewer is implemented using [Open Artifacts Renderer](https://github.com/13point5/open-artifacts-renderer).
 
 ## Features
 
-- 🎨 Generate Artifacts with [Anthropic](https://www.anthropic.com/) and [OpenAI](https://openai.com/) LLMs
+- 🎨 Generate Artifacts with [Anthropic](https://www.anthropic.com/) Claude 4 models (Opus and Sonnet)
 - 📸 Crop and 🔊 Talk to iteratively edit Artifacts
-- 🎛️ Utilizes user's API keys for interactions
+- 🎛️ No authentication required - direct access to chat interface
+- 🔑 Uses your API key securely on the server side
 
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/) - React framework
-- [Supabase](https://supabase.io/) - Database and Auth System
-- [Claude API](https://www.anthropic.com/) - LLM API
+- [Claude API](https://www.anthropic.com/) - LLM API (Claude 4 Opus & Sonnet)
 - [shadcn/ui](https://ui.shadcn.com/) - Component Library
 - [Vercel AI SDK](https://sdk.vercel.ai/docs/introduction) - Toolkit for building AI-powered applications
 
@@ -37,37 +37,6 @@ The Artifact viewer is implemented using [Open Artifacts Renderer](https://githu
    cd open-artifacts
    ```
 
-### Supabase Setup
-
-1. Install the [Supabase CLI](https://supabase.com/docs/guides/cli/getting-started#installing-the-supabase-cli)
-
-1. Create a Supabase project
-
-1. Initialize Supabase locally
-
-   ```
-   supabase init
-   ```
-
-1. Link your local project to your remote Supabase project
-
-   ```
-   supabase link --project-ref <your-project-ref>
-   ```
-
-1. Apply Migrations
-
-   ```
-   supabase db push
-   ```
-
-1. Copy env variables from your Supabase project
-
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=
-   ```
-
 ### App Setup
 
 1. Install dependencies:
@@ -76,19 +45,22 @@ The Artifact viewer is implemented using [Open Artifacts Renderer](https://githu
    npm install
    ```
 
+1. Set up your environment variables in `.env.local`:
+
+   ```
+   ANTHROPIC_API_KEY=your-claude-api-key-here
+   NEXT_PUBLIC_ARTIFACT_RENDERER_URL=http://localhost:3001
+   ```
+
+1. Setup [Open Artifacts Renderer](https://github.com/13point5/open-artifacts-renderer) and run it on port 3001.
+
 1. Run the development server:
 
    ```
    npm run dev
    ```
 
-1. Setup [Open Artifacts Renderer](https://github.com/13point5/open-artifacts-renderer) and set the `NEXT_PUBLIC_ARTIFACT_RENDERER_URL` env variable to the URL of the renderer.
-
-   ```
-   NEXT_PUBLIC_ARTIFACT_RENDERER_URL=
-   ```
-
-1. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+1. Open [http://localhost:3000](http://localhost:3000) in your browser to start chatting with Claude 4!
 
 ## License
 

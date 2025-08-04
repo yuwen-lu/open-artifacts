@@ -62,8 +62,25 @@ export const ChatInput = ({
 }: Props) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const { onKeyDown } = useEnterSubmit({ onSubmit });
-  const [model, setModel] = useState<Models>(getSettings().model);
+  const [model, setModel] = useState<Models>(Models.claudeSonnet4);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Initialize model from settings after component mounts
+  useEffect(() => {
+    setModel(getSettings().model);
+  }, []);
+
+  // Listen for localStorage changes to sync model selection
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setModel(getSettings().model);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   // Handle file upload button click
   const handleFileUpload = () => {
@@ -93,7 +110,10 @@ export const ChatInput = ({
   // Handle model change and update settings
   const handleModelChange = (newModel: Models) => {
     setModel(newModel);
-    updateSettings({ ...getSettings(), model: newModel });
+    updateSettings({ model: newModel });
+    
+    // Manually trigger storage event for same-window sync
+    window.dispatchEvent(new Event('storage'));
   };
 
   return (
@@ -179,11 +199,7 @@ export const ChatInput = ({
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>
-                  {getSettings().openaiApiKey
-                    ? "Click to record voice and crop artifacts for editing"
-                    : "Missing OpenAI API Key in Settings for Speech to Text"}
-                </p>
+                <p>Click to record voice and crop artifacts for editing</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -208,11 +224,8 @@ export const ChatInput = ({
             <SelectValue placeholder="Select Model" />
           </SelectTrigger>
           <SelectContent className="w-fit">
-            <SelectItem value={Models.claude}>Claude Sonnet</SelectItem>
-            <SelectItem value={Models.gpt4oMini}>GPT-4o Mini</SelectItem>
-            <SelectItem value={Models.gpt4o}>GPT-4o</SelectItem>
-            <SelectItem value={Models.gpt4turbo}>GPT-4 Turbo</SelectItem>
-            <SelectItem value={Models.gpt35turbo}>GPT-3.5 Turbo</SelectItem>
+            <SelectItem value={Models.claudeSonnet4}>Claude Sonnet 4</SelectItem>
+            <SelectItem value={Models.claudeOpus4}>Claude Opus 4</SelectItem>
           </SelectContent>
         </Select>
       </div>

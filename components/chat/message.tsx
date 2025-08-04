@@ -11,23 +11,6 @@ import {
 } from "@/lib/utils";
 import { BotIcon, CodeIcon, Loader2Icon, UserIcon } from "lucide-react";
 
-const getDisplayNameFromRole = (
-  role: ChatMessageRoles,
-  model: Models | null
-) => {
-  if (role === "user") return "Me";
-
-  switch (model) {
-    case Models.claude:
-      return "Claude";
-
-    case Models.gpt4o:
-      return "GPT 4o";
-
-    default:
-      return model;
-  }
-};
 
 type Props = {
   role: ChatMessageRoles;

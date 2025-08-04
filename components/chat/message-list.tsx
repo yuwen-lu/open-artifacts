@@ -24,18 +24,17 @@ export const ChatMessageList = ({
       className="flex-1 flex flex-col gap-4 max-w-3xl mx-auto w-full pt-1"
     >
       {messages.map((message, index) => (
-        <>
+        <div key={message.id || index}>
           <ChatMessage
-            key={index}
             role={message.role}
-            model={Models.claude}
+            model={Models.claudeSonnet4}
             text={message.content}
             attachments={message.experimental_attachments || []}
             setCurrentArtifact={setCurrentArtifact}
           />
 
           {index !== messages.length - 1 && <Separator />}
-        </>
+        </div>
       ))}
     </div>
   );
