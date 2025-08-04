@@ -51,6 +51,23 @@ export const ChatPanel = ({ id }: Props) => {
     }
   }, [recording, transcribing, transcript?.text, setInput]);
 
+  // Warn user before leaving page if there are messages
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (messages.length > 0) {
+        e.preventDefault();
+        e.returnValue = "You have unsaved chat messages. Are you sure you want to leave?";
+        return "You have unsaved chat messages. Are you sure you want to leave?";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [messages.length]);
+
   // Handle artifact capture
   const handleCapture: ReactArtifactProps["onCapture"] = ({
     selectionImg,
