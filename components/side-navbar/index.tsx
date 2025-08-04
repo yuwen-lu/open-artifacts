@@ -62,7 +62,7 @@ export const SideNavBar = () => {
         <div className="flex flex-col gap-4 mt-2">
           <ModelSelector value={currentModel} onChange={handleModelChange} />
           <a
-            href="https://github.com/13point5/open-artifacts"
+            href="https://github.com/yuwen-lu/open-artifacts"
             target="_blank"
             className="text-black flex items-center gap-4 px-1"
           >
@@ -96,7 +96,7 @@ export const SideNavBar = () => {
 
       <div className="flex flex-col items-center gap-4">
         <a
-          href="https://github.com/13point5/open-artifacts"
+          href="https://github.com/yuwen-lu/open-artifacts"
           target="_blank"
           className="text-black"
         >
